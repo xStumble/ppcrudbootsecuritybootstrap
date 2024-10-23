@@ -48,14 +48,14 @@ public class AdminController {
     @PostMapping("/adduser")
     public String createUser(@ModelAttribute("user") @Valid User user, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
-            return "admin/adminpage";
+            return "redirect:/admin";
         }
 
         try {
             user.setPassword(passwordEncoder.encode(user.getPassword()));
             userService.addUser(user);
         } catch (EntityExistsExceptionWithType e) {
-            return "admin/adminpage";
+            return "redirect:/admin";
         }
 
         return "redirect:/admin";
@@ -71,7 +71,7 @@ public class AdminController {
         errors.forEach(sortedBindingResult::addError);
 
         if (sortedBindingResult.hasErrors()) {
-            return "admin/adminpage";
+            return "redirect:/admin";
         }
 
         if (user.getPassword() == null || user.getPassword().isEmpty() || user.getPassword().length() < 4) {
@@ -83,7 +83,7 @@ public class AdminController {
         try {
             userService.updateUser(id, user);
         } catch (EntityExistsExceptionWithType e) {
-            return "admin/adminpage";
+            return "redirect:/admin";
         }
 
         return "redirect:/admin";
